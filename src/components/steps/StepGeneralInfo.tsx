@@ -59,7 +59,6 @@ export default function StepGeneralInfo({ expertise, onSave, onPhotoUpload }: Pr
       } else {
         setUploadError(error || 'Fotoğraf yüklenemedi.')
       }
-      }
     }
     
     const updated = [...photos, ...newPhotos]
