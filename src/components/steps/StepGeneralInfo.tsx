@@ -6,8 +6,12 @@ import { Upload, X, Camera, Save } from 'lucide-react'
 import type { Expertise } from '../../types/expertise'
 import { TRANSMISSION_TYPES } from '../../constants/expertise'
 
+const PLATE_REGEX = /^(0[1-9]|[1-7][0-9]|8[01])\s?[A-ZÇŞÜĞİÖ]{1,3}\s?[0-9]{2,4}$/i
+
 const schema = z.object({
-  plate: z.string().min(1, 'Plaka zorunludur'),
+  plate: z.string()
+    .min(1, 'Plaka zorunludur')
+    .refine(v => PLATE_REGEX.test(v.trim()), 'Geçersiz plaka formatı (örn: 34 ABC 123)'),
   customer_name: z.string().optional(),
   km: z.string().optional(),
   transmission_type: z.string().optional(),
@@ -24,6 +28,7 @@ interface Props {
 export default function StepGeneralInfo({ expertise, onSave, onPhotoUpload }: Props) {
   const [photos, setPhotos] = useState<string[]>(expertise.photos || [])
   const [uploading, setUploading] = useState(false)
+  const [uploadError, setUploadError] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -43,11 +48,16 @@ export default function StepGeneralInfo({ expertise, onSave, onPhotoUpload }: Pr
     if (files.length === 0) return
     
     setUploading(true)
+    setUploadError(null)
     const newPhotos: string[] = []
     
     for (const file of files.slice(0, 2 - photos.length)) {
       const url = await onPhotoUpload(file)
-      if (url) newPhotos.push(url)
+      if (url) {
+        newPhotos.push(url)
+      } else {
+        setUploadError('Fotoğraf yüklenemedi. Supabase Storage bucket’ınızın var ve public olduğundan emin olun.')
+      }
     }
     
     const updated = [...photos, ...newPhotos]
@@ -145,6 +155,9 @@ export default function StepGeneralInfo({ expertise, onSave, onPhotoUpload }: Pr
             </button>
           )}
         </div>
+        {uploadError && (
+          <p className="mt-1 text-xs text-red-600">{uploadError}</p>
+        )}
         <input
           ref={fileInputRef}
           type="file"

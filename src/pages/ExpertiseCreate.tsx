@@ -8,8 +8,13 @@ import { useAuth } from '../hooks/useAuth'
 import { createExpertise } from '../services/expertiseService'
 import { TRANSMISSION_TYPES } from '../constants/expertise'
 
+const PLATE_REGEX = /^(0[1-9]|[1-7][0-9]|8[01])\s?[A-ZÇŞÜĞİÖ]{1,3}\s?[0-9]{2,4}$/i
+
 const schema = z.object({
-  plate: z.string().min(1, 'Plaka zorunludur').max(20, 'Plaka çok uzun').transform(v => v.toUpperCase()),
+  plate: z.string()
+    .min(1, 'Plaka zorunludur')
+    .refine(v => PLATE_REGEX.test(v.trim()), 'Geçersiz plaka formatı (örn: 34 ABC 123)')
+    .transform(v => v.toUpperCase().trim()),
   customer_name: z.string().optional(),
   km: z.string().optional(),
   transmission_type: z.string().optional(),
