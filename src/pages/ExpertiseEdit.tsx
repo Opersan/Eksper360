@@ -4,7 +4,7 @@ import { CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react'
 import { getExpertiseById, updateExpertise } from '../services/expertiseService'
 import { uploadPhoto } from '../services/storageService'
 import { useAuth } from '../hooks/useAuth'
-import type { Expertise } from '../types/expertise'
+import type { Expertise, ExpertiseFormData } from '../types/expertise'
 import {
   DEFAULT_BODY_CHECKS,
   DEFAULT_INSPECTION_CHECKS,
@@ -54,7 +54,7 @@ export default function ExpertiseEdit() {
     setSaving(true)
     const sanitized = Object.fromEntries(
       Object.entries(updates).map(([k, v]) => [k, v === null ? undefined : v])
-    ) as Partial<Expertise>
+    ) as Partial<ExpertiseFormData>
     const { data, error } = await updateExpertise(id, sanitized)
     if (!error && data) {
       setExpertise(data)
