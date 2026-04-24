@@ -63,10 +63,11 @@ export default function ExpertiseEdit() {
     return { error }
   }
 
-  const handlePhotoUpload = async (file: File): Promise<string | null> => {
-    if (!user || !id) return null
-    const { url } = await uploadPhoto(user.id, id, file)
-    return url
+  const handlePhotoUpload = async (file: File): Promise<{ url: string | null; error: string | null }> => {
+    if (!user || !id) return { url: null, error: 'Kullanıcı veya ekspertiz bilgisi eksik.' }
+    const { url, error } = await uploadPhoto(user.id, id, file)
+    if (error) return { url: null, error: (error as Error).message || 'Yükleme başarısız.' }
+    return { url, error: null }
   }
 
   const handleComplete = async () => {

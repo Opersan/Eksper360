@@ -34,6 +34,7 @@ export default function ExpertiseCreate() {
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(schema),
+    mode: 'onChange',
   })
 
   const onSubmit = async (data: FormData) => {
@@ -84,13 +85,26 @@ export default function ExpertiseCreate() {
             <label className="label">
               Plaka <span className="text-red-500">*</span>
             </label>
-            <input
-              {...register('plate')}
-              type="text"
-              placeholder="34 ABC 123"
-              className="input-field uppercase"
-              style={{ textTransform: 'uppercase' }}
-            />
+            {(() => {
+              const plateField = register('plate')
+              return (
+                <input
+                  {...plateField}
+                  onChange={(e) => {
+                    e.target.value = e.target.value
+                      .replace(/[^0-9A-Za-zÇçŞşÜüĞğİiÖö\s]/g, '')
+                      .toUpperCase()
+                      .slice(0, 9)
+                    plateField.onChange(e)
+                  }}
+                  type="text"
+                  maxLength={9}
+                  placeholder="34 ABC 123"
+                  className="input-field uppercase"
+                  style={{ textTransform: 'uppercase' }}
+                />
+              )
+            })()}
             {errors.plate && (
               <p className="mt-1 text-xs text-red-600">{errors.plate.message}</p>
             )}

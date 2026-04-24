@@ -22,10 +22,10 @@ type FormData = z.infer<typeof schema>
 interface Props {
   expertise: Expertise
   onSave: (updates: Partial<Expertise>) => Promise<{ error: unknown } | undefined>
-  onPhotoUpload: (file: File) => Promise<string | null>
+  onPhotoUpload: (file: File) => Promise<{ url: string | null; error: string | null }>
 }
 
-export default function StepGeneralInfo({ expertise, onSave, onPhotoUpload }: Props) {
+export default function StepGeneralInfo({ expertise, onSave, onPhotoUpload }: Props): JSX.Element {
   const [photos, setPhotos] = useState<string[]>(expertise.photos || [])
   const [uploading, setUploading] = useState(false)
   const [uploadError, setUploadError] = useState<string | null>(null)
@@ -35,6 +35,7 @@ export default function StepGeneralInfo({ expertise, onSave, onPhotoUpload }: Pr
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
+    mode: 'onChange',
     defaultValues: {
       plate: expertise.plate,
       customer_name: expertise.customer_name || '',
@@ -52,11 +53,12 @@ export default function StepGeneralInfo({ expertise, onSave, onPhotoUpload }: Pr
     const newPhotos: string[] = []
     
     for (const file of files.slice(0, 2 - photos.length)) {
-      const url = await onPhotoUpload(file)
+      const { url, error } = await onPhotoUpload(file)
       if (url) {
         newPhotos.push(url)
       } else {
-        setUploadError('Fotoğraf yüklenemedi. Supabase Storage bucket’ınızın var ve public olduğundan emin olun.')
+        setUploadError(error || 'Fotoğraf yüklenemedi.')
+      }
       }
     }
     
@@ -90,12 +92,26 @@ export default function StepGeneralInfo({ expertise, onSave, onPhotoUpload }: Pr
           <label className="label">
             Plaka <span className="text-red-500">*</span>
           </label>
-          <input
-            {...register('plate')}
-            type="text"
-            className="input-field uppercase"
-            style={{ textTransform: 'uppercase' }}
-          />
+          {(() => {
+            const plateField = register('plate')
+            return (
+              <input
+                {...plateField}
+                onChange={(e) => {
+                  e.target.value = e.target.value
+                    .replace(/[^0-9A-Za-zÇçŞşÜüĞğİiÖö\s]/g, '')
+                    .toUpperCase()
+                    .slice(0, 9)
+                  plateField.onChange(e)
+                }}
+                type="text"
+                maxLength={9}
+                placeholder="34 ABC 123"
+                className="input-field uppercase"
+                style={{ textTransform: 'uppercase' }}
+              />
+            )
+          })()}
           {errors.plate && <p className="mt-1 text-xs text-red-600">{errors.plate.message}</p>}
         </div>
 

@@ -55,54 +55,122 @@ function CarBodyDiagram({ bodyChecks }: { bodyChecks: BodyCheck[] }) {
   const s = (n: string) => col(n).stroke
 
   return (
-    <svg viewBox="0 0 200 390" className="w-44 mx-auto" style={{ filter: 'drop-shadow(0 1px 4px rgba(0,0,0,0.15))' }}>
-      {/* Dış gövde */}
-      <path d="M62,10 Q100,5 138,10 L154,28 L164,62 L164,328 L152,368 Q100,376 48,368 L36,328 L36,62 L46,28 Z"
-        fill="#e2e8f0" stroke="#9ca3af" strokeWidth="1.5" />
-      {/* Kaput */}
-      <path d="M64,13 Q100,9 136,13 L148,28 L150,96 L50,96 L52,28 Z"
-        fill={f('Kaput')} stroke={s('Kaput')} strokeWidth="1.5" />
-      {/* Ön cam */}
-      <path d="M67,98 L133,98 L128,118 L72,118 Z"
-        fill="rgba(186,230,253,0.7)" stroke="#7dd3fc" strokeWidth="0.75" />
-      {/* Tavan */}
-      <rect x="57" y="120" width="86" height="130" rx="3"
-        fill={f('Tavan')} stroke={s('Tavan')} strokeWidth="1.5" />
-      {/* Arka cam */}
-      <path d="M72,252 L128,252 L133,272 L67,272 Z"
-        fill="rgba(186,230,253,0.7)" stroke="#7dd3fc" strokeWidth="0.75" />
-      {/* Bagaj */}
-      <path d="M50,274 L150,274 L148,352 Q100,364 52,352 Z"
-        fill={f('Bagaj')} stroke={s('Bagaj')} strokeWidth="1.5" />
-      {/* Sol Ön Çamurluk */}
-      <path d="M37,30 L56,30 L56,96 L38,96 L37,62 Z"
+    <svg viewBox="0 0 220 430" className="w-48 mx-auto" style={{ filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.18))' }}>
+      <defs>
+        <radialGradient id="rimGrad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#9ca3af" />
+          <stop offset="100%" stopColor="#374151" />
+        </radialGradient>
+      </defs>
+
+      {/* ── Dış gövde / tam silüet ── */}
+      <path d="M72,18 Q110,10 148,18 L164,34 L170,72 L170,340 L158,382 Q110,394 62,382 L50,340 L50,72 L56,34 Z"
+        fill="#dde4ed" stroke="#94a3b8" strokeWidth="1.5" />
+
+      {/* ── Ön tampon ── */}
+      <path d="M74,20 Q110,13 146,20 L160,34 L60,34 Z"
+        fill="#c8d3df" stroke="#9ca3af" strokeWidth="1" />
+
+      {/* ── Ön far sol ── */}
+      <path d="M52,26 L68,22 L66,34 L50,36 Z"
+        fill="#fef9c3" stroke="#ca8a04" strokeWidth="0.8" />
+      {/* ── Ön far sağ ── */}
+      <path d="M168,26 L152,22 L154,34 L170,36 Z"
+        fill="#fef9c3" stroke="#ca8a04" strokeWidth="0.8" />
+      {/* ── Ön panjur ── */}
+      <rect x="85" y="14" width="50" height="10" rx="3"
+        fill="#475569" stroke="#334155" strokeWidth="0.75" />
+
+      {/* ── Sol Ön Çamurluk ── */}
+      <path d="M50,36 L66,36 L64,96 L50,98 Z"
         fill={f('Sol Ön Çamurluk')} stroke={s('Sol Ön Çamurluk')} strokeWidth="1.5" />
-      {/* Sağ Ön Çamurluk */}
-      <path d="M163,30 L144,30 L144,96 L162,96 L163,62 Z"
+      {/* ── Sağ Ön Çamurluk ── */}
+      <path d="M170,36 L154,36 L156,96 L170,98 Z"
         fill={f('Sağ Ön Çamurluk')} stroke={s('Sağ Ön Çamurluk')} strokeWidth="1.5" />
-      {/* Sol Ön Kapı */}
-      <rect x="36" y="120" width="19" height="64" rx="2"
+
+      {/* ── Kaput ── */}
+      <path d="M68,36 L152,36 L156,96 L64,96 Z"
+        fill={f('Kaput')} stroke={s('Kaput')} strokeWidth="1.5" />
+      {/* Motor kapağı çizgisi */}
+      <path d="M80,60 Q110,56 140,60" fill="none" stroke={s('Kaput')} strokeWidth="0.6" strokeDasharray="3 2" />
+
+      {/* ── Ön cam (A-pillar + windshield) ── */}
+      <path d="M72,98 L148,98 L142,122 L78,122 Z"
+        fill="rgba(186,230,253,0.78)" stroke="#7dd3fc" strokeWidth="1" />
+      <line x1="72" y1="98" x2="78" y2="122" stroke="#93c5fd" strokeWidth="0.8" />
+      <line x1="148" y1="98" x2="142" y2="122" stroke="#93c5fd" strokeWidth="0.8" />
+
+      {/* ── Tavan ── */}
+      <rect x="60" y="124" width="100" height="142" rx="4"
+        fill={f('Tavan')} stroke={s('Tavan')} strokeWidth="1.5" />
+      {/* Tavan çatı izi */}
+      <line x1="110" y1="128" x2="110" y2="262" stroke={s('Tavan')} strokeWidth="0.5" strokeDasharray="4 3" opacity="0.4" />
+
+      {/* ── Sol Ön Kapı ── */}
+      <rect x="48" y="126" width="10" height="68" rx="2"
         fill={f('Sol Ön Kapı')} stroke={s('Sol Ön Kapı')} strokeWidth="1.5" />
-      {/* Sağ Ön Kapı */}
-      <rect x="145" y="120" width="19" height="64" rx="2"
+      <rect x="49" y="157" width="5" height="3" rx="1.5" fill="#94a3b8" />
+      {/* ── Sağ Ön Kapı ── */}
+      <rect x="162" y="126" width="10" height="68" rx="2"
         fill={f('Sağ Ön Kapı')} stroke={s('Sağ Ön Kapı')} strokeWidth="1.5" />
-      {/* Sol Arka Kapı */}
-      <rect x="36" y="186" width="19" height="64" rx="2"
+      <rect x="166" y="157" width="5" height="3" rx="1.5" fill="#94a3b8" />
+
+      {/* ── Sol Arka Kapı ── */}
+      <rect x="48" y="196" width="10" height="68" rx="2"
         fill={f('Sol Arka Kapı')} stroke={s('Sol Arka Kapı')} strokeWidth="1.5" />
-      {/* Sağ Arka Kapı */}
-      <rect x="145" y="186" width="19" height="64" rx="2"
+      <rect x="49" y="227" width="5" height="3" rx="1.5" fill="#94a3b8" />
+      {/* ── Sağ Arka Kapı ── */}
+      <rect x="162" y="196" width="10" height="68" rx="2"
         fill={f('Sağ Arka Kapı')} stroke={s('Sağ Arka Kapı')} strokeWidth="1.5" />
-      {/* Sol Arka Çamurluk */}
-      <path d="M37,252 L56,252 L56,354 L37,338 Z"
+      <rect x="166" y="227" width="5" height="3" rx="1.5" fill="#94a3b8" />
+
+      {/* ── Arka cam ── */}
+      <path d="M78,268 L142,268 L148,292 L72,292 Z"
+        fill="rgba(186,230,253,0.78)" stroke="#7dd3fc" strokeWidth="1" />
+      <line x1="78" y1="268" x2="72" y2="292" stroke="#93c5fd" strokeWidth="0.8" />
+      <line x1="142" y1="268" x2="148" y2="292" stroke="#93c5fd" strokeWidth="0.8" />
+
+      {/* ── Sol Arka Çamurluk ── */}
+      <path d="M50,268 L64,268 L62,366 L50,355 Z"
         fill={f('Sol Arka Çamurluk')} stroke={s('Sol Arka Çamurluk')} strokeWidth="1.5" />
-      {/* Sağ Arka Çamurluk */}
-      <path d="M163,252 L144,252 L144,354 L163,338 Z"
+      {/* ── Sağ Arka Çamurluk ── */}
+      <path d="M170,268 L156,268 L158,366 L170,355 Z"
         fill={f('Sağ Arka Çamurluk')} stroke={s('Sağ Arka Çamurluk')} strokeWidth="1.5" />
-      {/* Tekerlekler */}
-      <ellipse cx="38" cy="77"  rx="7" ry="11" fill="#1f2937" />
-      <ellipse cx="162" cy="77" rx="7" ry="11" fill="#1f2937" />
-      <ellipse cx="38" cy="308"  rx="7" ry="11" fill="#1f2937" />
-      <ellipse cx="162" cy="308" rx="7" ry="11" fill="#1f2937" />
+
+      {/* ── Bagaj ── */}
+      <path d="M64,294 L156,294 L158,366 Q110,380 62,366 Z"
+        fill={f('Bagaj')} stroke={s('Bagaj')} strokeWidth="1.5" />
+      <path d="M82,316 Q110,311 138,316" fill="none" stroke={s('Bagaj')} strokeWidth="0.6" strokeDasharray="3 2" />
+
+      {/* ── Arka stop sol ── */}
+      <path d="M50,353 L62,364 L60,380 L50,372 Z"
+        fill="#fca5a5" stroke="#dc2626" strokeWidth="0.8" />
+      {/* ── Arka stop sağ ── */}
+      <path d="M170,353 L158,364 L160,380 L170,372 Z"
+        fill="#fca5a5" stroke="#dc2626" strokeWidth="0.8" />
+      {/* ── Arka tampon ── */}
+      <path d="M62,382 Q110,394 158,382 L160,394 Q110,406 60,394 Z"
+        fill="#c8d3df" stroke="#9ca3af" strokeWidth="1" />
+
+      {/* ── Tekerlekler (ön sol) ── */}
+      <ellipse cx="42" cy="82" rx="9" ry="14" fill="#1e293b" stroke="#334155" strokeWidth="1" />
+      <ellipse cx="42" cy="82" rx="5" ry="8"  fill="url(#rimGrad)" />
+      <ellipse cx="42" cy="82" rx="2" ry="3"  fill="#94a3b8" />
+      {/* ── Tekerlekler (ön sağ) ── */}
+      <ellipse cx="178" cy="82" rx="9" ry="14" fill="#1e293b" stroke="#334155" strokeWidth="1" />
+      <ellipse cx="178" cy="82" rx="5" ry="8"  fill="url(#rimGrad)" />
+      <ellipse cx="178" cy="82" rx="2" ry="3"  fill="#94a3b8" />
+      {/* ── Tekerlekler (arka sol) ── */}
+      <ellipse cx="42" cy="320" rx="9" ry="14" fill="#1e293b" stroke="#334155" strokeWidth="1" />
+      <ellipse cx="42" cy="320" rx="5" ry="8"  fill="url(#rimGrad)" />
+      <ellipse cx="42" cy="320" rx="2" ry="3"  fill="#94a3b8" />
+      {/* ── Tekerlekler (arka sağ) ── */}
+      <ellipse cx="178" cy="320" rx="9" ry="14" fill="#1e293b" stroke="#334155" strokeWidth="1" />
+      <ellipse cx="178" cy="320" rx="5" ry="8"  fill="url(#rimGrad)" />
+      <ellipse cx="178" cy="320" rx="2" ry="3"  fill="#94a3b8" />
+
+      {/* ── Yön göstergesi (ön ok) ── */}
+      <polygon points="110,4 116,14 104,14" fill="#3b82f6" opacity="0.7" />
     </svg>
   )
 }
