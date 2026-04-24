@@ -456,51 +456,49 @@ export default function ExpertiseReport() {
               <SectionTitle>LASTİK KONTROL EKSPERTİZ RAPORU</SectionTitle>
               <div className="grid grid-cols-2 divide-x divide-y text-xs">
                 {[
-                  ['Ön Sol Lastik Derinliği', expertise.tire_info.frontLeft],
-                  ['Ön Sağ Lastik Derinliği', expertise.tire_info.frontRight],
-                  ['Arka Sol Lastik Derinliği', expertise.tire_info.rearLeft],
-                  ['Arka Sağ Lastik Derinliği', expertise.tire_info.rearRight],
+                  ['Ön Sol', expertise.tire_info?.frontLeft],
+                  ['Ön Sağ', expertise.tire_info?.frontRight],
+                  ['Arka Sol', expertise.tire_info?.rearLeft],
+                  ['Arka Sağ', expertise.tire_info?.rearRight],
                 ].map(([label, val]) => (
                   <div key={label} className="p-2.5">
                     <div className="text-gray-400 mb-0.5">{label}</div>
-                    <div className="font-semibold">{val ? `${val} mm` : '—'}</div>
+                    <div className="font-semibold">{val || '—'}</div>
                   </div>
                 ))}
               </div>
               <div className="grid grid-cols-2 divide-x border-t border-gray-200 text-xs">
                 <div className="p-2.5">
                   <div className="text-gray-400 mb-0.5">Lastik Türü</div>
-                  <div className="font-semibold">{expertise.tire_info.tireType || '—'}</div>
+                  <div className="font-semibold">{expertise.tire_info?.tireType || '—'}</div>
                 </div>
                 <div className="p-2.5">
                   <div className="text-gray-400 mb-0.5">Üretim Yılı</div>
-                  <div className="font-semibold">{expertise.tire_info.productionYear || '—'}</div>
+                  <div className="font-semibold">{expertise.tire_info?.productionYear || '—'}</div>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* ═══ SAYFA 4: Motor + Mekanik Notlar (varsa) ═══ */}
-        {(expertise.engine_note || expertise.mechanical_note) && (
-          <div className="bg-white shadow-xl print:shadow-none">
-            <PageBand reportNo={reportNo} plate={expertise.plate} />
-            <div className="p-5 space-y-4">
-              {expertise.engine_note && (
-                <div className="border border-gray-300 rounded overflow-hidden">
-                  <SectionTitle>MOTOR KONTROL EKSPERTİZ RAPORU</SectionTitle>
-                  <div className="p-4 text-sm text-gray-800 whitespace-pre-wrap">{expertise.engine_note}</div>
-                </div>
-              )}
-              {expertise.mechanical_note && (
-                <div className="border border-gray-300 rounded overflow-hidden">
-                  <SectionTitle>MEKANİK KONTROL EKSPERTİZ RAPORU</SectionTitle>
-                  <div className="p-4 text-sm text-gray-800 whitespace-pre-wrap">{expertise.mechanical_note}</div>
-                </div>
-              )}
+        {/* ═══ SAYFA 4: Motor + Mekanik Notlar ═══ */}
+        <div className="bg-white shadow-xl print:shadow-none">
+          <PageBand reportNo={reportNo} plate={expertise.plate} />
+          <div className="p-5 space-y-4">
+            <div className="border border-gray-300 rounded overflow-hidden">
+              <SectionTitle>MOTOR KONTROL EKSPERTİZ RAPORU</SectionTitle>
+              <div className="p-4 text-sm text-gray-800 whitespace-pre-wrap">
+                {expertise.engine_note?.trim() || <span className="text-gray-400 italic">Not girilmemiş.</span>}
+              </div>
+            </div>
+            <div className="border border-gray-300 rounded overflow-hidden">
+              <SectionTitle>MEKANİK KONTROL EKSPERTİZ RAPORU</SectionTitle>
+              <div className="p-4 text-sm text-gray-800 whitespace-pre-wrap">
+                {expertise.mechanical_note?.trim() || <span className="text-gray-400 italic">Not girilmemiş.</span>}
+              </div>
             </div>
           </div>
-        )}
+        </div>
       </div>
     </div>
   )

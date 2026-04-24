@@ -19,6 +19,7 @@ export default function StepTireInfo({ tireInfo, onSave }: Props) {
   const [info, setInfo] = useState<TireInfo>(tireInfo)
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
 
   const update = (field: keyof TireInfo, value: string) => {
     setInfo({ ...info, [field]: value })
@@ -26,10 +27,15 @@ export default function StepTireInfo({ tireInfo, onSave }: Props) {
 
   const handleSave = async () => {
     setSaving(true)
-    await onSave(info)
+    setSaveError(null)
+    const result = await onSave(info)
     setSaving(false)
-    setSaved(true)
-    setTimeout(() => setSaved(false), 2000)
+    if (result?.error) {
+      setSaveError('Kaydedilemedi. Lütfen tekrar deneyin.')
+    } else {
+      setSaved(true)
+      setTimeout(() => setSaved(false), 2000)
+    }
   }
 
   return (
@@ -76,6 +82,7 @@ export default function StepTireInfo({ tireInfo, onSave }: Props) {
         </div>
       </div>
 
+      {saveError && <p className="text-xs text-red-600">{saveError}</p>}
       <button
         type="button"
         onClick={handleSave}

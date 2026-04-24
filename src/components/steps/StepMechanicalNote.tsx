@@ -10,13 +10,19 @@ export default function StepMechanicalNote({ note, onSave }: Props) {
   const [value, setValue] = useState(note)
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
 
   const handleSave = async () => {
     setSaving(true)
-    await onSave(value)
+    setSaveError(null)
+    const result = await onSave(value)
     setSaving(false)
-    setSaved(true)
-    setTimeout(() => setSaved(false), 2000)
+    if (result?.error) {
+      setSaveError('Kaydedilemedi. Lütfen tekrar deneyin.')
+    } else {
+      setSaved(true)
+      setTimeout(() => setSaved(false), 2000)
+    }
   }
 
   return (
@@ -34,6 +40,7 @@ export default function StepMechanicalNote({ note, onSave }: Props) {
           className="input-field resize-none"
         />
       </div>
+      {saveError && <p className="text-xs text-red-600">{saveError}</p>}
       <button
         type="button"
         onClick={handleSave}
