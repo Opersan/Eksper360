@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { ArrowLeft, Printer, Download, CheckCircle, XCircle, Minus, Car } from 'lucide-react'
 import { getExpertiseById, updateExpertise } from '../services/expertiseService'

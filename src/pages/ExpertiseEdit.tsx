@@ -52,7 +52,10 @@ export default function ExpertiseEdit() {
   const handleSaveStep = async (updates: Partial<Expertise>) => {
     if (!id || !expertise) return
     setSaving(true)
-    const { data, error } = await updateExpertise(id, updates)
+    const sanitized = Object.fromEntries(
+      Object.entries(updates).map(([k, v]) => [k, v === null ? undefined : v])
+    ) as Partial<Expertise>
+    const { data, error } = await updateExpertise(id, sanitized)
     if (!error && data) {
       setExpertise(data)
     }
